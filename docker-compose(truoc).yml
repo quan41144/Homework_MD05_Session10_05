@@ -1,0 +1,30 @@
+# docker-compose.yml (bản gốc - CÓ LỖI)
+version: "3.8"
+
+services:
+  order-service:
+    build: .
+    image: quickbite/order-service:latest
+    container_name: order-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/quickbite_db
+      SPRING_DATASOURCE_USERNAME: quickbite
+      SPRING_DATASOURCE_PASSWORD: quickbite_pass
+    restart: on-failure
+
+  order-db:
+    image: postgres:15
+    container_name: order-db
+    environment:
+      POSTGRES_DB: quickbite_db
+      POSTGRES_USER: quickbite
+      POSTGRES_PASSWORD: quickbite_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - order_db_data:/var/lib/postgresql/data
+
+volumes:
+  order_db_data:
